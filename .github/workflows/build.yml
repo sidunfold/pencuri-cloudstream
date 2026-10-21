@@ -1,0 +1,50 @@
+name: Build Cloudstream repository
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+permissions:
+  contents: write
+concurrency:
+  group: cloudstream-build
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Build plugins
+        run: |
+          chmod +x gradlew
+          ./gradlew make makePluginsJson
+      - name: Prepare repository
+        shell: bash
+        run: |
+          mkdir -p publish
+          cp PencuriMovie/build/*.cs3 publish/
+          cp build/plugins.json publish/
+          python3 - <<'PY'
+          import json, os
+          repo = os.environ['GITHUB_REPOSITORY']
+          with open('publish/repo.json', 'w') as f:
+              json.dump({'name':'PencuriMovie Submalay','description':'Experimental Malay provider','manifestVersion':1,'pluginLists':[f'https://raw.githubusercontent.com/{repo}/builds/plugins.json']},f,indent=2)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PencuriMovie-repository
+          path: publish/
+      - name: Publish builds branch
+        shell: bash
+        run: |
+          cp -R publish "$RUNNER_TEMP/pencuri-publish"
+          git checkout --orphan deploy-builds
+          git rm -rf .
+          cp -R "$RUNNER_TEMP/pencuri-publish/." .
+          git add '*.json' '*.cs3'
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Build Cloudstream plugins'
+          git push origin HEAD:builds --force
