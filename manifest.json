@@ -1,0 +1,29 @@
+{
+  "name": "PencuriMovie Submalay — Percubaan",
+  "version": "0.1.0",
+  "scrapers": [
+    {
+      "id": "pencuri-submalay",
+      "name": "PencuriMovie Submalay (Experimental)",
+      "description": "Android phone / Android TV / Google TV. Playback unverified; some hosts reject requests.",
+      "version": "0.1.0",
+      "author": "sidunfold",
+      "supportedTypes": [
+        "movie",
+        "tv",
+        "series"
+      ],
+      "filename": "pencuri.js",
+      "enabled": true,
+      "hasSettings": false,
+      "formats": [
+        "mp4",
+        "mkv",
+        "m3u8"
+      ],
+      "contentLanguage": [
+        "ms"
+      ]
+    }
+  ]
+}

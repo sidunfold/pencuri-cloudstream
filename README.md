@@ -1,32 +1,18 @@
-# PencuriMovie Submalay — Cloudstream
+# PencuriMovie for Nuvio — experimental 0.1.0
 
-Kod percubaan untuk https://pencurimoviesubmalay26.site/.
+Sasaran: Nuvio yang menyokong JavaScript Plugins pada telefon Android, Android TV dan Google TV. Google TV menggunakan platform Android TV. Ini bukan aplikasi APK dan bukan manifest add-on Stremio.
 
-## Status sebenar
-- Struktur HTML halaman utama, carian, butiran filem dan episod telah diperiksa.
-- Permintaan pemain `zeta_player_ajax` telah memberi respons iframe pada satu contoh.
-- Binaan tempatan belum dapat dijalankan: muat turun Gradle gagal kerana rangkaian.
-- Main balik belum diuji dalam aplikasi Cloudstream. Hos luar hanya akan berfungsi jika extractor Cloudstream menyokongnya. Tiada jaminan semua mirror boleh dimainkan.
-- Tiada repo awam diterbitkan dan tiada fail .cs3 siap disertakan dalam ZIP ini.
-- Plugin ditandakan status 3 (beta-only) semasa percubaan.
+Status: ujian logik menggunakan respons tiruan lulus untuk movie, tv dan series, termasuk pemilihan episod dan penolakan tajuk/tahun tidak sepadan. Belum diuji dalam aplikasi pada peranti sebenar. Ujian hos RPM memberikan `Request is invalid`; main balik belum berjaya disahkan. Hos tanpa pautan media terus mungkin tidak disokong. Jangan anggap repo ini sedia untuk kegunaan harian.
 
-## Bina repo melalui GitHub
-1. Cipta repository **public** baharu, contohnya `pencuri-cloudstream`.
-2. Ekstrak ZIP. Muat naik semua kandungan di DALAM folder PencuriCloudstream ke akar repo. Pastikan `.github/workflows/build.yml`, folder `gradle` dan fail `gradlew` turut dimuat naik.
-3. Di Settings → Actions → General, benarkan Actions serta Read and write permissions jika tetapan akaun memerlukannya.
-4. Di Actions, jalankan workflow **Build Cloudstream repository**. Binaan mungkin memerlukan pelarasan jika API/dependency upstream berubah.
-5. Tunggu workflow berjaya. Ia menghasilkan `.cs3`, `plugins.json` dan `repo.json` pada branch `builds`. Branch ini khusus untuk fail binaan dan diganti pada setiap binaan.
-6. Pautan repo selepas binaan berjaya:
-   `https://raw.githubusercontent.com/USERNAME/pencuri-cloudstream/builds/repo.json`
-   Gantikan USERNAME dan nama repo dengan maklumat sebenar.
-7. Dalam Cloudstream beta: Settings → Extensions → Add Repository. Masukkan pautan tadi, kemudian pasang PencuriMovie Submalay.
+URL pemasangan percubaan:
 
-ZIP dan pautan website asal tidak boleh ditampal terus sebagai URL repo.
+https://raw.githubusercontent.com/sidunfold/pencuri-cloudstream/nuvio/manifest.json
 
-## Ujian pada telefon
-Cuba carian, satu filem dan satu episod. Cuba beberapa mirror. Jika tiada pautan video, hos mungkin tiada extractor yang sesuai. Periksa log Cloudstream sebelum menukar status plugin kepada 1.
+Dalam Nuvio yang mempunyai menu Plugins, tambah URL manifest ini sebagai repository kemudian aktifkan PencuriMovie. Gunakan URL yang sama pada telefon Android, Android TV dan Google TV. Jika aplikasi hanya menawarkan add-on Stremio, format ini tidak serasi dengan menu itu.
 
-## Asal binaan
-Fail wrapper dan konfigurasi asas diadaptasi daripada https://github.com/recloudstream/TestPlugins.
-Dokumentasi: https://recloudstream.github.io/csdocs/devs/using-plugin-template/
-Format repo: https://recloudstream.github.io/csdocs/devs/create-your-own-json-repository/
+Fail manifest.json dan pencuri.js berada bersama-sama pada branch nuvio. Provider memerlukan TMDB_API_KEY yang dibekalkan oleh runtime Nuvio; ia tidak membundel kunci API. Format mediaType tv dan series diterima. Pautan iframe tidak dipulangkan sebagai video. Setiap permintaan mempunyai timeout 12 saat.
+
+Ujian tempatan: `node test.cjs`.
+
+Rujukan format: https://github.com/yoruix/nuvio-providers/blob/template/DOCUMENTATION.md
+Runtime: https://github.com/NuvioMedia/NuvioMobile dan https://github.com/NuvioMedia/NuvioTV
